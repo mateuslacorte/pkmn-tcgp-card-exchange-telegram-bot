@@ -8,8 +8,7 @@
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  * 
@@ -33,6 +32,9 @@ config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const db = new Database('tcg_bot.db');
+
+// Optional environment variable for the channel ID
+const allowedChannelId = process.env.CHANNEL_ID ? parseInt(process.env.CHANNEL_ID) : null;
 
 const initDB = () => {
   db.exec(`CREATE TABLE IF NOT EXISTS users (
@@ -90,12 +92,24 @@ const getMissingCards = (userId, expansion) => {
   return db.prepare('SELECT card_number FROM cards WHERE user_id = ? AND expansion = ?').all(userId, expansion);
 };
 
+// Function to check if the bot is called in the correct channel
+const isCorrectChannel = (ctx) => {
+  if (allowedChannelId && ctx.chat && ctx.chat.id !== allowedChannelId) {
+    const channelLink = `https://t.me/${ctx.chat.username}`;
+    ctx.reply(`Please use the bot in the designated channel: @${ctx.chat.username} ${channelLink}`);
+    return false;
+  }
+  return true;
+};
+
 bot.start((ctx) => {
   addUser(ctx.from.id, ctx.from.username);
   ctx.reply('Welcome to the Pokémon TCG Pocket trading bot!');
 });
 
 bot.command('add_expansion', (ctx) => {
+  if (!isCorrectChannel(ctx)) return;
+
   const [name, totalCards] = ctx.message.text.split(' ').slice(1);
   if (!name || !totalCards) {
     return ctx.reply('Usage: /add_expansion <name> <total cards>');
@@ -105,6 +119,8 @@ bot.command('add_expansion', (ctx) => {
 });
 
 bot.command('add_missing', (ctx) => {
+  if (!isCorrectChannel(ctx)) return;
+
   const [expansion, cardNumber] = ctx.message.text.split(' ').slice(1);
   if (!expansion || !cardNumber) {
     return ctx.reply('Usage: /add_missing <expansion> <card number>');
@@ -114,6 +130,8 @@ bot.command('add_missing', (ctx) => {
 });
 
 bot.command('missing', (ctx) => {
+  if (!isCorrectChannel(ctx)) return;
+
   const expansion = ctx.message.text.split(' ')[1];
   if (!expansion) {
     return ctx.reply('Usage: /missing <expansion>');
