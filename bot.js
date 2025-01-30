@@ -24,9 +24,9 @@
  * SOFTWARE.
  */
 
-import { Telegraf } from 'telegraf';
-import { config } from 'dotenv';
-import Database from 'better-sqlite3';
+const { Telegraf } = require('telegraf');
+const { config } = require('dotenv');
+const Database = require('better-sqlite3');
 
 config();
 
