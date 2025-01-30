@@ -27,7 +27,6 @@
 const { Telegraf } = require('telegraf');
 const { config } = require('dotenv');
 const Database = require('better-sqlite3');
-const express = require('express');
 
 config();
 
