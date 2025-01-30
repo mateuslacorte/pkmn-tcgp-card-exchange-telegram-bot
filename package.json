@@ -1,0 +1,23 @@
+{
+  "name": "Pokémon TCG Pocket Card Exchange Bot",
+  "version": "1.0.0",
+  "description": "A Telegram bot that allows users to track missing cards from Pokémon TCG Pocket expansions and facilitate trades with other players.",
+  "author": "Mateus M. Côrtes <mateus@lacorte.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateuslacorte/pkmn-tcgp-card-exchange-telegram-bot.git"
+  },
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^8.5.0",
+    "dotenv": "^16.3.1",
+    "telegraf": "^4.12.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
