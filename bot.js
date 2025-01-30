@@ -140,6 +140,12 @@ bot.command('missing', (ctx) => {
   ctx.reply(response);
 });
 
+if(process.env.ENV === 'debug') {
+  bot.on('message', (ctx) => {
+    console.log('Received message:', ctx.message);
+  });
+}
+
 bot.launch({
   webhook: {
     domain: process.env.BOT_URL,
