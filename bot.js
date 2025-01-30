@@ -139,4 +139,5 @@ bot.command('missing', (ctx) => {
   ctx.reply(response);
 });
 
-bot.launch();
+bot.telegram.setWebhook(`${process.env.BOT_URL}/webhook`);
+bot.startWebhook('/webhook', null, 3000); // or your desired port
