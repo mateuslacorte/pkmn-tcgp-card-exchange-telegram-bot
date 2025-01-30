@@ -14,7 +14,7 @@ A Telegram bot that allows users to track missing cards from Pokémon TCG Pocket
 ## Setup & Installation
 
 ### Requirements
-- Node.js (>=16.x)
+- Node.js (>=18.x)
 - Docker & Docker Compose (for containerized deployment)
 
 ### Environment Variables
@@ -22,7 +22,6 @@ Create a `.env` file with the following variables:
 ```
 BOT_TOKEN=<your_telegram_bot_token>
 DATABASE_PATH=tcg_bot.db
-EXPANSIONS=Genetic Apex,Mythical Island,Space-Time Smackdown
 ```
 You can add new expansions to `EXPANSIONS` separated by commas.
 
