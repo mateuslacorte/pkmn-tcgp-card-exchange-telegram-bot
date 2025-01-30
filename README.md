@@ -24,7 +24,7 @@ ENV=<debug|production>
 BOT_TOKEN=<your_telegram_bot_token>
 DATABASE_PATH=<your_database_path>
 CHANNEL_ID=<your_channel_id> (optional)
-BOT_URL=<your_server_url>
+BOT_DOMAIN=<your_server_domain>
 ```
 You can add new expansions to `EXPANSIONS` separated by commas.
 
