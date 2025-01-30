@@ -20,7 +20,7 @@ A Telegram bot that allows users to track missing cards from Pokémon TCG Pocket
 ### Environment Variables
 Create a `.env` file with the following variables:
 ```
-ENV=<log|prod>
+ENV=<debug|production>
 BOT_TOKEN=<your_telegram_bot_token>
 DATABASE_PATH=<your_database_path>
 CHANNEL_ID=<your_channel_id> (optional)
