@@ -100,11 +100,6 @@ const isCorrectChannel = (ctx) => {
   return true;
 };
 
-bot.start((ctx) => {
-  addUser(ctx.from.id, ctx.from.username);
-  ctx.reply('Welcome to the Pokémon TCG Pocket trading bot!');
-});
-
 bot.command('add_expansion', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
 
