@@ -31,9 +31,8 @@ import Database from 'better-sqlite3';
 config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const db = new Database('tcg_bot.db');
+const db = new Database(process.env.DATABASE_PATH);
 
-// Optional environment variable for the channel ID
 const allowedChannelId = process.env.CHANNEL_ID ? parseInt(process.env.CHANNEL_ID) : null;
 
 const initDB = () => {
@@ -92,7 +91,6 @@ const getMissingCards = (userId, expansion) => {
   return db.prepare('SELECT card_number FROM cards WHERE user_id = ? AND expansion = ?').all(userId, expansion);
 };
 
-// Function to check if the bot is called in the correct channel
 const isCorrectChannel = (ctx) => {
   if (allowedChannelId && ctx.chat && ctx.chat.id !== allowedChannelId) {
     const channelLink = `https://t.me/${ctx.chat.username}`;
