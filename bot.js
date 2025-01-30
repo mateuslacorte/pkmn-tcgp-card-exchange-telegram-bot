@@ -27,6 +27,7 @@
 const { Telegraf } = require('telegraf');
 const { config } = require('dotenv');
 const Database = require('better-sqlite3');
+const express = require('express');
 
 config();
 
@@ -100,6 +101,11 @@ const isCorrectChannel = (ctx) => {
   return true;
 };
 
+bot.command('start', (ctx) => {
+  addUser(ctx.from.id, ctx.from.username);
+  ctx.reply('Welcome to the Pokémon TCG Pocket trading bot!');
+});
+
 bot.command('add_expansion', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
 
@@ -135,4 +141,4 @@ bot.command('missing', (ctx) => {
 });
 
 bot.telegram.setWebhook(`${process.env.BOT_URL}/webhook`);
-bot.startWebhook('/webhook', null, 3000); // or your desired port
+bot.startWebhook('/webhook', null, 3000);
