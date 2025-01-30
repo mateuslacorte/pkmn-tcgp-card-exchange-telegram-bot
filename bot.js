@@ -147,7 +147,7 @@ if(process.env.ENV === 'debug') {
 
 bot.launch({
   webhook: {
-    domain: process.env.BOT_URL,
-    port: 4000
+    domain: process.env.BOT_DOMAIN,
+    port: 3000
   }
-})
+}).then(() => console.log("Webhook bot listening on port", 3000));
