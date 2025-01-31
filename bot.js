@@ -110,7 +110,7 @@ bot.command('add_expansion', (ctx) => {
   ctx = ctx.message.text.split(' ');
   ctx.shift();
   ctx.join(' ');
-  const [name, totalCards] = .split(' | ').slice(1);
+  const [name, totalCards] = ctx.split(' | ').slice(1);
   if (!name || !totalCards) {
     return ctx.reply('Usage: /add_expansion <name> | <total cards>');
   }
