@@ -95,7 +95,7 @@ bot.command('add_expansion', (ctx) => {
     return ctx.reply('Usage: /add_expansion <name>|<total cards>');
   }
   addExpansion(name, parseInt(totalCards, 10));
-  ctx.reply(`Expansion ${name} added with ${total cards} cards.`);
+  ctx.reply(`Expansion ${name} added with ${totalCards} cards.`);
 });
 
 bot.command('add_missing', (ctx) => {
