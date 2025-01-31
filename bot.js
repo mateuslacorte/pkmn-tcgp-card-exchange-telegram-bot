@@ -108,7 +108,7 @@ bot.command('start', (ctx) => {
 bot.command('add_expansion', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   let input = ctx.message.text.replace('/add_expansion ', '');
-  console.log(input);
+  console.log(input.split('|').slice(1));
   const [name, totalCards] = input.split('|').slice(1);
   if (!name || !totalCards) {
     return ctx.reply('Usage: /add_expansion <name>|<total cards>');
