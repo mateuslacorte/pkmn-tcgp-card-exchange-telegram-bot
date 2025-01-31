@@ -37,8 +37,7 @@ const allowedChannelId = process.env.CHANNEL_ID ? parseInt(process.env.CHANNEL_I
 
 const initDB = () => {
   db.exec(`CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY,
-    username TEXT UNIQUE
+    username TEXT PRIMARY KEY
   );`);
 
   db.exec(`CREATE TABLE IF NOT EXISTS expansions (
@@ -47,19 +46,18 @@ const initDB = () => {
   );`);
 
   db.exec(`CREATE TABLE IF NOT EXISTS cards (
-    user_id INTEGER,
+    username INTEGER,
     expansion TEXT,
     card_number TEXT,
-    copies INTEGER DEFAULT 1,
-    PRIMARY KEY(user_id, expansion, card_number),
-    FOREIGN KEY(user_id) REFERENCES users(id),
+    PRIMARY KEY(username, expansion, card_number),
+    FOREIGN KEY(username) REFERENCES users(username),
     FOREIGN KEY(expansion) REFERENCES expansions(name)
   );`);
 };
 
 initDB();
 
-const addUser = (userId, username) => {
+const addUser = (username) => {
   try {
     db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(userId, username);
   } catch (e) {}
@@ -69,26 +67,22 @@ const addExpansion = (name, totalCards) => {
   db.prepare('INSERT INTO expansions (name, total_cards) VALUES (?, ?) ON CONFLICT(name) DO UPDATE SET total_cards = ?').run(name, totalCards, totalCards);
 };
 
-const addMissingCard = (userId, expansion, cardNumber) => {
+const addMissingCard = (username, expansion, card) => {
   db.prepare(
-    'INSERT INTO cards (user_id, expansion, card_number, copies) VALUES (?, ?, ?, 1) ON CONFLICT(user_id, expansion, card_number) DO UPDATE SET copies = copies + 1'
-  ).run(userId, expansion, cardNumber);
+    'INSERT INTO cards (username, expansion, card_number) VALUES (?, ?, ?)'
+  ).run(username, expansion, card);
 };
 
-const removeCard = (userId, expansion, cardNumber) => {
-  const stmt = db.prepare('SELECT copies FROM cards WHERE user_id = ? AND expansion = ? AND card_number = ?');
-  const row = stmt.get(userId, expansion, cardNumber);
+const removeCard = (username, expansion, card) => {
+  const stmt = db.prepare('SELECT * FROM cards WHERE username = ? AND expansion = ? AND card_number = ?');
+  const row = stmt.get(username, expansion, card);
   if (row) {
-    if (row.copies > 1) {
-      db.prepare('UPDATE cards SET copies = copies - 1 WHERE user_id = ? AND expansion = ? AND card_number = ?').run(userId, expansion, cardNumber);
-    } else {
-      db.prepare('DELETE FROM cards WHERE user_id = ? AND expansion = ? AND card_number = ?').run(userId, expansion, cardNumber);
-    }
+    db.prepare('DELETE FROM cards WHERE user_id = ? AND expansion = ? AND card_number = ?').run(userId, expansion, cardNumber);
   }
 };
 
-const getMissingCards = (userId, expansion) => {
-  return db.prepare('SELECT card_number FROM cards WHERE user_id = ? AND expansion = ?').all(userId, expansion);
+const getMissingCards = (username, expansion) => {
+  return db.prepare('SELECT card_number FROM cards WHERE username = ? AND expansion = ?').all(username, expansion);
 };
 
 const isCorrectChannel = (ctx) => {
@@ -101,7 +95,7 @@ const isCorrectChannel = (ctx) => {
 };
 
 bot.command('start', (ctx) => {
-  addUser(ctx.from.id, ctx.from.username);
+  addUser(ctx.from.username);
   ctx.reply('Welcome to the Pokémon TCG Pocket trading bot!');
 });
 
@@ -123,18 +117,18 @@ bot.command('add_missing', (ctx) => {
   if (!expansion || !cardNumber) {
     return ctx.reply('Usage: /add_missing <expansion>|<card number>');
   }
-  addMissingCard(ctx.from.id, expansion, cardNumber);
+  addMissingCard(ctx.from.username, expansion, cardNumber);
   ctx.reply(`Card ${cardNumber} from expansion ${expansion} added to your missing list.`);
 });
 
 bot.command('missing', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
-  let input = ctx.message.text.replace('/missing ', '');
+  let input = ctx.message.text.replace('/missing ', '').replace('@tcgpr_bot', '');
   const expansion = input;
   if (!expansion) {
     return ctx.reply('Usage: /missing <expansion>');
   }
-  const cards = getMissingCards(ctx.from.id, expansion);
+  const cards = getMissingCards(ctx.from.username, expansion);
   const response = cards.length ? `Missing cards in ${expansion}: ${cards.map(c => c.card_number).join(', ')}` : 'No missing cards recorded.';
   ctx.reply(response);
 });
