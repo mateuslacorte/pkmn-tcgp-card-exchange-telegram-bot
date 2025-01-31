@@ -254,7 +254,7 @@ bot.command('offer', (ctx) => {
   updateTradeStatus(proposer, true);
   updateTradeStatus(acceptor, true);
 
-  const proposerMsg = ctx.reply(
+  const proposerMsg = ctx.sendMessage(
     proposer,
     `Trade offer from @${acceptor}:\n` +
     `You receive: ${trade.requested_exp}|${trade.requested_card}\n` +
@@ -266,7 +266,7 @@ bot.command('offer', (ctx) => {
     ])
   );
 
-  const acceptorMsg = ctx.reply(
+  const acceptorMsg = ctx.sendMessage(
     acceptor,
     `Trade offer to @${proposer}:\n` +
     `You send: ${trade.requested_exp}|${trade.requested_card}\n` +
