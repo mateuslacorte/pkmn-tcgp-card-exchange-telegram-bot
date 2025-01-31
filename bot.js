@@ -118,6 +118,29 @@ bot.command('add_missing', (ctx) => {
   ctx.reply(`Card ${cardNumber} from expansion ${expansion} added to your missing list.`);
 });
 
+bot.command('missing', (ctx) => {
+  if (!isCorrectChannel(ctx)) return;
+  
+  const allMissing = getAllMissingCards();
+  const grouped = allMissing.reduce((acc, { username, expansion, card_number }) => {
+    acc[username] = acc[username] || {};
+    acc[username][expansion] = acc[username][expansion] || [];
+    acc[username][expansion].push(card_number);
+    return acc;
+  }, {});
+
+  let response = '';
+  for (const [username, expansions] of Object.entries(grouped)) {
+    response += `*${username}*\n`;
+    for (const [expansion, cards] of Object.entries(expansions)) {
+      response += `_${expansion}_: ${cards.sort((a, b) => a - b).join(', ')}\n`;
+    }
+    response += '\n';
+  }
+
+  ctx.replyWithMarkdown(response || 'No missing cards recorded for any user');
+});
+
 bot.command('trade', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   const input = ctx.message.text.replace('/trade ', '').trim();
@@ -131,13 +154,13 @@ bot.command('trade', (ctx) => {
   if (getTradeStatus(ctx.from.username)?.in_trade) {
     return ctx.reply('You are already in a trade!');
   }
-
+  
   const isMissing = db.prepare(`
-    SELECT 1 FROM cards 
+    SELECT COUNT(*) as count FROM cards 
     WHERE username = ? AND expansion = ? AND card_number = ?
   `).get(ctx.from.username, expansion, card);
-
-  if (!isMissing) {
+  
+  if (!isMissing || isMissing.count === 0) {
     return ctx.reply("You can't request a card you're not missing!");
   }
 
