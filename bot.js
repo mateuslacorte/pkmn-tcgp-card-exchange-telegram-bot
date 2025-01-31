@@ -129,7 +129,7 @@ bot.command('missing', (ctx) => {
     return ctx.reply('Usage: /missing <expansion>');
   }
   const cards = getMissingCards(ctx.from.username, expansion);
-  const response = cards.length ? `Missing cards in ${expansion}: ${cards.map(c => c.card_number).join(', ')}` : 'No missing cards recorded.';
+  const response = cards.length ? `Missing cards in ${expansion}: ${cards.map(c => Number(c.card_number)).sort().join(', ')}` : 'No missing cards recorded.';
   ctx.reply(response);
 });
 
