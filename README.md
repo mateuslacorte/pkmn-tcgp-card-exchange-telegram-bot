@@ -53,7 +53,6 @@ You can add new expansions to `EXPANSIONS` separated by commas.
 - `/add_expansion <name> <total_cards>` - Add a new expansion.
 - `/add_missing <expansion> <card_number>` - Add a missing card to your collection.
 - `/missing <expansion>` - List your missing cards from a specific expansion.
-- `/trade <username> <expansion> <card_number>` - Request a trade with another user.
 
 ## License
 MIT License © 2025 Mateus M. Côrtes
