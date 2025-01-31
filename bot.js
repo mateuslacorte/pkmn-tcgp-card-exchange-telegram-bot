@@ -254,7 +254,7 @@ bot.command('offer', (ctx) => {
   updateTradeStatus(proposer, true);
   updateTradeStatus(acceptor, true);
 
-  const proposerMsg = ctx.telegram.sendMessage(
+  const proposerMsg = ctx.reply(
     proposer,
     `Trade offer from @${acceptor}:\n` +
     `You receive: ${trade.requested_exp}|${trade.requested_card}\n` +
@@ -266,7 +266,7 @@ bot.command('offer', (ctx) => {
     ])
   );
 
-  const acceptorMsg = ctx.telegram.sendMessage(
+  const acceptorMsg = ctx.reply(
     acceptor,
     `Trade offer to @${proposer}:\n` +
     `You send: ${trade.requested_exp}|${trade.requested_card}\n` +
@@ -299,13 +299,13 @@ bot.action(/confirm_(\d+)/, async (ctx) => {
     updateTradeStatus(trade.proposer, false);
     updateTradeStatus(trade.acceptor, false);
 
-    ctx.telegram.editMessageText(
+    ctx.editMessageText(
       trade.proposer,
       trade.message_id.split(',')[0],
       null,
       `✅ Trade completed! Received ${trade.requested_exp}|${trade.requested_card}`
     );
-    ctx.telegram.editMessageText(
+    ctx.editMessageText(
       trade.acceptor,
       trade.message_id.split(',')[1],
       null,
@@ -325,13 +325,13 @@ bot.action(/cancel_(\d+)/, (ctx) => {
     updateTradeStatus(trade.proposer, false);
     updateTradeStatus(trade.acceptor, false);
 
-    ctx.telegram.editMessageText(
+    ctx.editMessageText(
       trade.proposer,
       trade.message_id.split(',')[0],
       null,
       '❌ Trade cancelled'
     );
-    ctx.telegram.editMessageText(
+    ctx.editMessageText(
       trade.acceptor,
       trade.message_id.split(',')[1],
       null,
