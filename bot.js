@@ -82,6 +82,15 @@ const getAllMissingCards = () => {
   `).all();
 };
 
+const isCorrectChannel = (ctx) => {
+  if (allowedChannelId && ctx.chat && ctx.chat.id !== allowedChannelId) {
+    const channelLink = `https://t.me/${ctx.chat.username}`;
+    ctx.reply(`Please use the bot in the designated channel: @${ctx.chat.username} ${channelLink}`);
+    return false;
+  }
+  return true;
+};
+
 bot.command('start', (ctx) => {
   addUser(ctx.from.username);
   ctx.reply('Welcome to the Pokémon TCG Pocket trading bot!');
