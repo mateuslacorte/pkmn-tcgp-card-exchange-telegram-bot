@@ -107,10 +107,12 @@ bot.command('start', (ctx) => {
 
 bot.command('add_expansion', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
-
-  const [name, totalCards] = ctx.message.text.split(' ').slice(1);
+  ctx = ctx.message.text.split(' ');
+  ctx.shift();
+  ctx.join(' ');
+  const [name, totalCards] = .split(' | ').slice(1);
   if (!name || !totalCards) {
-    return ctx.reply('Usage: /add_expansion <name> <total cards>');
+    return ctx.reply('Usage: /add_expansion <name> | <total cards>');
   }
   addExpansion(name, parseInt(totalCards, 10));
   ctx.reply(`Expansion ${name} added with ${totalCards} cards.`);
@@ -118,10 +120,12 @@ bot.command('add_expansion', (ctx) => {
 
 bot.command('add_missing', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
-
-  const [expansion, cardNumber] = ctx.message.text.split(' ').slice(1);
+  ctx = ctx.message.text.split(' ');
+  ctx.shift();
+  ctx.join(' ');
+  const [expansion, cardNumber] = ctx.message.text.split(' | ').slice(1);
   if (!expansion || !cardNumber) {
-    return ctx.reply('Usage: /add_missing <expansion> <card number>');
+    return ctx.reply('Usage: /add_missing <expansion> | <card number>');
   }
   addMissingCard(ctx.from.id, expansion, cardNumber);
   ctx.reply(`Card ${cardNumber} from expansion ${expansion} added to your missing list.`);
@@ -129,10 +133,12 @@ bot.command('add_missing', (ctx) => {
 
 bot.command('missing', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
-
-  const expansion = ctx.message.text.split(' ')[1];
+  ctx = ctx.message.text.split(' ');
+  ctx.shift();
+  ctx.join(' ');
+  const expansion = ctx.message.text.split('| ')[1];
   if (!expansion) {
-    return ctx.reply('Usage: /missing <expansion>');
+    return ctx.reply('Usage: /missing | <expansion>');
   }
   const cards = getMissingCards(ctx.from.id, expansion);
   const response = cards.length ? `Missing cards in ${expansion}: ${cards.map(c => c.card_number).join(', ')}` : 'No missing cards recorded.';
