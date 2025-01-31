@@ -108,8 +108,7 @@ bot.command('start', (ctx) => {
 bot.command('add_expansion', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   let input = ctx.message.text.replace('/add_expansion ', '');
-  console.log(input.split('|').slice(1));
-  const [name, totalCards] = input.split('|').slice(1);
+  const [name, totalCards] = input.split('|');
   if (!name || !totalCards) {
     return ctx.reply('Usage: /add_expansion <name>|<total cards>');
   }
@@ -120,7 +119,7 @@ bot.command('add_expansion', (ctx) => {
 bot.command('add_missing', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   let input = ctx.message.text.replace('/add_missing ', '');
-  const [expansion, cardNumber] = input.split('|').slice(1);
+  const [expansion, cardNumber] = input.split('|');
   if (!expansion || !cardNumber) {
     return ctx.reply('Usage: /add_missing <expansion>|<card number>');
   }
@@ -131,7 +130,7 @@ bot.command('add_missing', (ctx) => {
 bot.command('missing', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   let input = ctx.message.text.replace('/missing ', '');
-  const expansion = input.split('|')[1];
+  const expansion = input;
   if (!expansion) {
     return ctx.reply('Usage: /missing <expansion>');
   }
