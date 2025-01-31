@@ -109,7 +109,7 @@ bot.command('add_expansion', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   ctx = ctx.message.text.split(' ');
   ctx.shift();
-  ctx.join(' ');
+  ctx = ctx.join(' ');
   const [name, totalCards] = ctx.split(' | ').slice(1);
   if (!name || !totalCards) {
     return ctx.reply('Usage: /add_expansion <name> | <total cards>');
@@ -122,7 +122,7 @@ bot.command('add_missing', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   ctx = ctx.message.text.split(' ');
   ctx.shift();
-  ctx.join(' ');
+  ctx = ctx.join(' ');
   const [expansion, cardNumber] = ctx.message.text.split(' | ').slice(1);
   if (!expansion || !cardNumber) {
     return ctx.reply('Usage: /add_missing <expansion> | <card number>');
@@ -135,7 +135,7 @@ bot.command('missing', (ctx) => {
   if (!isCorrectChannel(ctx)) return;
   ctx = ctx.message.text.split(' ');
   ctx.shift();
-  ctx.join(' ');
+  ctx = ctx.join(' ');
   const expansion = ctx.message.text.split('| ')[1];
   if (!expansion) {
     return ctx.reply('Usage: /missing | <expansion>');
