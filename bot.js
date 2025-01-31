@@ -59,7 +59,7 @@ initDB();
 
 const addUser = (username) => {
   try {
-    db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(userId, username);
+    db.prepare('INSERT INTO users (username) VALUES (?)').run(username);
   } catch (e) {}
 };
 
